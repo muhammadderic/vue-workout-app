@@ -3,6 +3,7 @@ import { computed, ref } from 'vue';
 import Layout from './components/layouts/Layout.vue';
 import Welcome from './components/pages/Welcome.vue';
 import Dashboard from './components/pages/Dashboard.vue';
+import Workout from './components/pages/Workout.vue';
 import { workoutProgram, type WorkoutProgram } from './utils';
 
 // This is the shape of each day's tracking data
@@ -67,6 +68,13 @@ function handleSelectWorkout(idx: number) {
       :handleSelectWorkout="handleSelectWorkout"
       :firstIncompleteWorkoutIndex="firstIncompleteWorkoutIndex"
       v-if="selectedDisplay == 2"
+    />
+
+    <Workout
+      :data="data" 
+      :selectedWorkout="selectedWorkout"
+      :handleChangeDisplay="handleChangeDisplay"
+      v-if="workoutProgram?.[selectedWorkout] && selectedDisplay == 3"
     />
   </Layout>
 </template>

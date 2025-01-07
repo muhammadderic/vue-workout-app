@@ -2,6 +2,11 @@
 import { ref } from 'vue'
 import { gymHealthFacts } from '../../utils'
 
+const props = defineProps({
+    handleSelectWorkout: Function,
+    firstIncompleteWorkoutIndex: Number,
+})
+
 // (show-facts): Function to generate a random fact
 function getRandomFact() {
   const randomIndex = Math.floor(Math.random() * gymHealthFacts.length)
@@ -37,6 +42,11 @@ function showAnotherFact() {
             <button @click="showAnotherFact" class="reload-btn">
                 another :)
             </button>
+
+            <button @click="() => handleSelectWorkout(
+                firstIncompleteWorkoutIndex < 0 ? 0 : firstIncompleteWorkoutIndex)"
+                >Start workout &rarr;
+            </button>
         </div>
     </section>
 </template>
@@ -66,7 +76,6 @@ function showAnotherFact() {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      height: 150px; /* Adjust as needed */
       padding: 1rem;
       border: 1px solid #ccc;
       border-radius: 8px;
@@ -83,7 +92,8 @@ function showAnotherFact() {
 
     .reload-btn {
       align-self: flex-end;
-      margin-top: auto;
+      margin-top: .5rem;
+      margin-bottom: 1rem;
       background: transparent;
       border: 1px solid #ccc;
       cursor: pointer;

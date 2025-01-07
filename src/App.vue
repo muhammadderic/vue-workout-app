@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import Layout from './components/layouts/Layout.vue';
+
 </script>
 
 <template>
-  <div>
+  <Layout>
     <h1>Hello Deric</h1>
-  </div>
+  </Layout>
 </template>
 
 <style scoped>

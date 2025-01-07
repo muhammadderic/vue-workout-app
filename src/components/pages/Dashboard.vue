@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import Grid from '../Grid.vue'
 import { gymHealthFacts } from '../../utils'
 
 const props = defineProps({
@@ -48,6 +49,8 @@ function showAnotherFact() {
                 >Start workout &rarr;
             </button>
         </div>
+
+        <Grid v-bind="props"  />
     </section>
 </template>
 

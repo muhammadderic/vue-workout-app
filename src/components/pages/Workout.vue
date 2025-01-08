@@ -7,6 +7,8 @@
     const { data, selectedWorkout } = defineProps({
         data: Object,
         selectedWorkout: Number,
+        handleSaveWorkout: Function,
+        isWorkoutComplete: Boolean,
         handleChangeDisplay: Function
     })
 
@@ -71,6 +73,18 @@
                 placeholder="14kg" 
                 type="text"/>
           </div>
+      </div>
+
+      <div class="card workout-btns">
+          <button @click="handleSaveWorkout" class="icon-btn">
+            Save & Exit
+          </button>
+
+          <button 
+            :disabled="!isWorkoutComplete" 
+            @click="handleSaveWorkout">
+            Complete
+          </button>
       </div>
     </section>
 </template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import Layout from './components/layouts/Layout.vue';
 import Welcome from './components/pages/Welcome.vue';
 import Dashboard from './components/pages/Dashboard.vue';
@@ -29,6 +29,15 @@ for (const [key, workoutData] of Object.entries(workoutProgram as WorkoutProgram
 
 const data = ref<TrackingState>(defaultData) // {1....30: {exercise_name: '', .....}}
 
+const isWorkoutComplete = computed(() => {
+  const currWorkout = data.value?.[selectedWorkout.value]
+  if (!currWorkout) { return false } // guard clause to exit function
+
+  const isCompleteCheck = Object.values(currWorkout).every(ex => !!ex)
+  console.log('ISCOMPLETE: ', isCompleteCheck)
+  return isCompleteCheck
+})
+
 // Computed property to find first incomplete workout index
 // It scanning through the data to find the first day where at least one exercise hasn't been filled in.
 const firstIncompleteWorkoutIndex = computed(() => {
@@ -55,6 +64,28 @@ function handleSelectWorkout(idx: number) {
   selectedWorkout.value = idx
 }
 
+function handleSaveWorkout() {
+  // save the current data snapshot to localstorage so that we can retrieve it next time
+  localStorage.setItem('workouts', JSON.stringify(data.value))
+
+  // show the dashboard
+  selectedDisplay.value = 2
+
+  // deselect a workout
+  selectedWorkout.value = -1
+}
+
+onMounted(() => {
+  if (!localStorage) {return}
+  const raw = localStorage.getItem('workouts')
+  if (raw) {
+    // only enter the if block if we find some data saved to the key workouts in localstroage database
+    const savedData = JSON.parse(raw)
+    data.value = savedData
+    selectedDisplay.value = 2 // if they have data, then we dont want them landing on the welcome screen every time they enter the app
+  }
+})
+
 </script>
 
 <template>
@@ -73,6 +104,8 @@ function handleSelectWorkout(idx: number) {
     <Workout
       :data="data" 
       :selectedWorkout="selectedWorkout"
+      :handleSaveWorkout="handleSaveWorkout"
+      :isWorkoutComplete="isWorkoutComplete"
       :handleChangeDisplay="handleChangeDisplay"
       v-if="workoutProgram?.[selectedWorkout] && selectedDisplay == 3"
     />

@@ -4,6 +4,7 @@
     defineProps({
         handleSelectWorkout: Function,
         firstIncompleteWorkoutIndex: Number,
+        handleResetPlan: Function
     })
 
     const workoutTypes = ['Push', 'Pull', 'Legs']
@@ -29,6 +30,7 @@
 
         <button 
           :disabled="firstIncompleteWorkoutIndex != -1"
+          @click="handleResetPlan" 
           class="card-button plan-card-reset">
            <p>Reset</p>
         </button>

@@ -6,6 +6,7 @@ import { gymHealthFacts } from '../../utils'
 const props = defineProps({
     handleSelectWorkout: Function,
     firstIncompleteWorkoutIndex: Number,
+    handleResetPlan: Function
 })
 
 // (show-facts): Function to generate a random fact

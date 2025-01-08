@@ -1,6 +1,8 @@
 <script setup>
-    import { computed } from 'vue'
-    import { workoutProgram } from '../../utils'
+    import { ref, computed } from 'vue'
+    import { HelpCircle } from 'lucide-vue-next'
+    import Portal from '../Portal.vue'
+    import { workoutProgram, exerciseDescriptions } from '../../utils'
 
     const workoutType = ['Push', "Pull", 'Legs']
 
@@ -15,9 +17,39 @@
     const workoutData = computed(() => workoutProgram[selectedWorkout.valueOf()])
     const workout = computed(() => workoutData.value?.workout || [])
     const warmup = computed(() => workoutData.value?.warmup || [])
+    let selectedExercise = ref(null)
+
+    const exerciseDescription = computed(() => exerciseDescriptions[selectedExercise.value])  
+    
+    function handleInfoClick(name) {
+      selectedExercise.value = name
+    }
+
+    function handleCloseModal() {
+      selectedExercise.value = null
+    }
 </script>
 
 <template>
+  <Portal 
+      hello="world" 
+      :handleCloseModal="handleCloseModal"  
+      v-if="selectedExercise"
+    >
+        <div class="exercise-description">
+            <h3>{{ selectedExercise }}</h3>
+
+            <div>
+                <small>Description</small>
+                <p>{{ exerciseDescription }}</p>
+            </div>
+
+            <button @click="handleCloseModal" class="portal-close-btn">
+              Close
+            </button>
+        </div>
+    </Portal>
+
     <section id="workout-card">
       <button @click="handleChangeDisplay(2)">
         Back
@@ -41,6 +73,9 @@
           <div class="workout-grid-row" v-for="(w, wIdx) in warmup" :key="wIdx">
               <div class="grid-name">
                   <p>{{ w.name }}</p>
+                  <button @click="handleInfoClick(w.name)">
+                    <HelpCircle class="icon" />
+                  </button>
               </div>
 
               <p>{{ w.sets }}</p>
@@ -62,6 +97,9 @@
           <div class="workout-grid-row" v-for="(w, wIdx) in workout" :key="wIdx">
               <div class="grid-name">
                   <p>{{ w.name }}</p>
+                  <button @click="handleInfoClick(w.name)">
+                    <HelpCircle class="icon" />
+                  </button>
               </div>
 
               <p>{{ w.sets }}</p>
